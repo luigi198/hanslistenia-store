@@ -35,6 +35,8 @@ yarn-error.log*
 # Real secrets (admin password hash, session secret, DB/AWS keys). Listed
 # explicitly so it stays ignored even if the pattern above is narrowed.
 .env.local
+# Downloaded credential files (e.g. "atlas-credentials.env")
+*.env
 
 # vercel
 .vercel
