@@ -2,23 +2,7 @@ import { MongoClient, type Db } from "mongodb";
 import { getEnv } from "@/config/env";
 import { getLogger } from "@/config/logger";
 import { globalSingleton } from "@/shared/global-singleton";
-
-/**
- * Memoizes one client per server instance. Concurrent callers share the same
- * in-flight connection; a failed attempt is forgotten so the next call retries.
- */
-export function createMongoClientProvider<T>(
-  connect: () => Promise<T>,
-): () => Promise<T> {
-  let pending: Promise<T> | undefined;
-  return () => {
-    pending ??= connect().catch((error: unknown) => {
-      pending = undefined;
-      throw error;
-    });
-    return pending;
-  };
-}
+import { memoizeUntilSuccess } from "@/shared/memoize-until-success";
 
 async function connectToAtlas(): Promise<MongoClient> {
   const logger = getLogger();
@@ -37,7 +21,7 @@ async function connectToAtlas(): Promise<MongoClient> {
 
 export function getMongoClient(): Promise<MongoClient> {
   return globalSingleton("mongo-client", () =>
-    createMongoClientProvider(connectToAtlas),
+    memoizeUntilSuccess(connectToAtlas),
   )();
 }
 

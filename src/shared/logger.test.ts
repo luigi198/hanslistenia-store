@@ -151,6 +151,22 @@ describe("logger serialization edge cases", () => {
     }
   });
 
+  it("scrubs PII from driver details nested in an error (Mongo errorResponse)", () => {
+    const { logger, lines, entries } = capture();
+    const error = Object.assign(new Error("E11000 duplicate key error"), {
+      code: 11000,
+      errorResponse: {
+        errmsg: 'E11000 dup key: { email: "a@b.cr" } cedula 1-2345-6789',
+        keyValue: ["8888-8888"],
+      },
+    });
+    logger.error("insert_failed", { error });
+    for (const secret of ["a@b.cr", "1-2345-6789", "8888-8888"]) {
+      expect(lines[0]).not.toContain(secret);
+    }
+    expect(entries()[0].error.code).toBe(11000);
+  });
+
   it.each([
     ["name"],
     ["firstName"],

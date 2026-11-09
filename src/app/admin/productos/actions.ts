@@ -98,7 +98,13 @@ export async function requestImageUploadAction(
 ): Promise<ImageUploadResponse> {
   await requireAdminSession();
   const parsed = uploadRequest.safeParse(input);
-  if (!parsed.success) return { ok: false, error: MESSAGES.unsupportedType };
+  if (!parsed.success) {
+    // Only field paths and codes: the input itself is not logged.
+    getLogger().warn("product_image_upload_request_invalid", {
+      issues: parsed.error.issues.map((i) => `${i.path.join(".")}:${i.code}`),
+    });
+    return { ok: false, error: MESSAGES.uploadUnavailable };
+  }
   try {
     const result = await getProductService().requestImageUpload(parsed.data);
     if (result.ok) return result;

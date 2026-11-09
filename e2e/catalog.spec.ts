@@ -10,6 +10,12 @@ const price = (text: string) => new RegExp(`^${text.replace(/ /g, "\\s")}$`);
 test("admin creates a product; visitors see it and its price follows the options", async ({
   page,
 }) => {
+  // Unique per attempt: the database persists across retries, and a second
+  // product with the same name would make the locators ambiguous.
+  const run = Date.now().toString(36);
+  const name = `Camiseta Básica E2E ${run}`;
+  const slug = `camiseta-basica-e2e-${run}`;
+
   // TODO(photos E2E): this test deliberately skips photos. To cover them:
   //   1. Start an adobe/s3mock container next to Mongo (see
   //      test-support/mongo-container.ts for the pattern) with an initial
@@ -23,7 +29,7 @@ test("admin creates a product; visitors see it and its price follows the options
   await page.getByRole("link", { name: "Productos" }).click();
   await page.getByRole("link", { name: "Nuevo producto" }).click();
 
-  await page.getByLabel("Nombre", { exact: true }).fill("Camiseta Básica E2E");
+  await page.getByLabel("Nombre", { exact: true }).fill(name);
   await page
     .getByLabel("Descripción")
     .fill("Algodón suave.\n\nHecha a pedido.");
@@ -40,20 +46,18 @@ test("admin creates a product; visitors see it and its price follows the options
   await page.getByRole("button", { name: "Crear producto" }).click();
 
   await expect(page).toHaveURL("/admin/productos");
-  const row = page.getByRole("row", { name: /Camiseta Básica E2E/ });
+  const row = page.getByRole("row", { name: new RegExp(name) });
   await expect(row).toContainText("Visible");
 
   // Public catalog shows it right away (cache refreshed by the admin save).
   await page.goto("/productos");
-  const card = page.getByRole("link", { name: /Camiseta Básica E2E/ });
+  const card = page.getByRole("link", { name: new RegExp(name) });
   // The card also holds the name, so match the price part only.
   await expect(card).toContainText(/Desde\s₡12\s000/);
   await card.click();
 
-  await expect(page).toHaveURL("/productos/camiseta-basica-e2e");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Camiseta Básica E2E",
-  );
+  await expect(page).toHaveURL(`/productos/${slug}`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(name);
   await expect(page.getByText("Lista en 2 semanas")).toBeVisible();
   const shownPrice = page.getByTestId("price");
   await expect(shownPrice).toHaveText(price("Desde ₡12 000"));

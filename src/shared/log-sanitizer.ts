@@ -1,3 +1,5 @@
+import { stripDiacritics } from "./text";
+
 export const REDACTED = "[REDACTED]";
 const CIRCULAR = "[Circular]";
 
@@ -39,7 +41,7 @@ const EMAIL_PATTERN = /[^\s@"'<>{}]+@[^\s@"'<>{}]+\.[^\s@"'<>{}]+/g;
 const ID_NUMBER_PATTERN = /\d[\d-]{6,}\d/g;
 
 function normalizeKey(key: string): string {
-  return key.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  return stripDiacritics(key).toLowerCase();
 }
 
 export function isSensitiveKey(key: string): boolean {
@@ -119,7 +121,9 @@ function sanitizeError(
   ancestors: WeakSet<object>,
 ): Record<string, unknown> {
   // Own enumerable props carry driver details (code, errorResponse, ...).
-  const extra = sanitizeEntries(Object.entries(error), ancestors);
+  // Their strings are free text too (Mongo's errmsg echoes duplicate
+  // values), so they get the same scrubbing as the message.
+  const extra = scrubStrings(sanitizeEntries(Object.entries(error), ancestors));
   return {
     ...extra,
     name: error.name,
@@ -128,4 +132,17 @@ function sanitizeError(
     cause:
       error.cause === undefined ? undefined : sanitize(error.cause, ancestors),
   };
+}
+
+/** Applies scrubText to every string in already-sanitized (JSON-safe) data. */
+function scrubStrings<T>(value: T): T;
+function scrubStrings(value: unknown): unknown {
+  if (typeof value === "string") return scrubText(value);
+  if (Array.isArray(value)) return value.map(scrubStrings);
+  if (value !== null && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, scrubStrings(v)]),
+    );
+  }
+  return value;
 }

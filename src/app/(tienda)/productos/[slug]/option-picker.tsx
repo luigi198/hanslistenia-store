@@ -4,7 +4,11 @@ import { useState } from "react";
 import { formatCRC } from "@/app/_lib/format";
 import { whatsappLink } from "@/app/_lib/store-info";
 import type { OptionGroup } from "@/domain/products/product";
-import { computeUnitPrice } from "@/domain/products/price";
+import {
+  chosenLabel,
+  computeUnitPrice,
+  isSelectionComplete,
+} from "@/domain/products/price";
 import styles from "./option-picker.module.css";
 
 interface Props {
@@ -23,12 +27,15 @@ export function OptionPicker({
 }: Props) {
   // Nothing preselected: a default size would too easily end up in an order.
   const [selection, setSelection] = useState<Record<string, string>>({});
-  const complete = optionGroups.every((g) => selection[g.name]);
+  const complete = isSelectionComplete(optionGroups, selection);
   const price = complete
     ? computeUnitPrice({ basePrice, optionGroups }, selection)
     : null;
   const chosen = optionGroups
-    .map((g) => selection[g.name] && `${g.name}: ${selection[g.name]}`)
+    .map((g) => {
+      const label = chosenLabel(selection, g.name);
+      return label && `${g.name}: ${label}`;
+    })
     .filter(Boolean)
     .join(", ");
 
@@ -47,7 +54,7 @@ export function OptionPicker({
                   type="radio"
                   name={group.name}
                   value={value.label}
-                  checked={selection[group.name] === value.label}
+                  checked={chosenLabel(selection, group.name) === value.label}
                   onChange={() =>
                     setSelection((s) => ({ ...s, [group.name]: value.label }))
                   }

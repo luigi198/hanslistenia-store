@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { computeUnitPrice, InvalidSelectionError, minUnitPrice } from "./price";
+import {
+  computeUnitPrice,
+  InvalidSelectionError,
+  isSelectionComplete,
+  minUnitPrice,
+} from "./price";
 
 const product = {
   basePrice: 12_000,
@@ -64,5 +69,26 @@ describe("minUnitPrice", () => {
     };
     expect(minUnitPrice(cheapestFirstIsNot)).toBe(10_500);
     expect(minUnitPrice(product)).toBe(12_000);
+  });
+});
+
+describe("isSelectionComplete", () => {
+  it("is true only when every group has a chosen value", () => {
+    expect(isSelectionComplete(product.optionGroups, { Talla: "S" })).toBe(
+      false,
+    );
+    expect(
+      isSelectionComplete(product.optionGroups, { Talla: "S", Color: "Negro" }),
+    ).toBe(true);
+  });
+
+  it("is not fooled by group names that exist on Object.prototype", () => {
+    const groups = [
+      { name: "constructor", values: [{ label: "A", priceDelta: 0 }] },
+    ];
+    expect(isSelectionComplete(groups, {})).toBe(false);
+    expect(() =>
+      computeUnitPrice({ basePrice: 1, optionGroups: groups }, {}),
+    ).toThrow(InvalidSelectionError);
   });
 });

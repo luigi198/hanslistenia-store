@@ -7,6 +7,7 @@ import {
   ACCEPTED_IMAGE_TYPES,
   IMAGE_FORMATS_LABEL,
   MAX_IMAGE_MB,
+  MAX_PRODUCT_IMAGES,
 } from "../image-rules";
 import styles from "../products.module.css";
 import type { EditableImage } from "./form-types";
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const UPLOAD_FAILED = "No se pudo subir la foto. Intente de nuevo.";
+const TOO_MANY = `Máximo ${MAX_PRODUCT_IMAGES} fotos por producto.`;
 
 /** Uploads one file straight to storage; returns the image or an error. */
 async function upload(file: File): Promise<EditableImage | string> {
@@ -52,10 +54,14 @@ export function ImagesEditor({ images, onChange, onUploadingChange }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   async function addFiles(files: File[]) {
+    // Uploading past the limit would leave photos the save then rejects.
+    const room = MAX_PRODUCT_IMAGES - images.length;
+    const accepted = files.slice(0, Math.max(room, 0));
+    setError(accepted.length < files.length ? TOO_MANY : null);
+    if (!accepted.length) return;
     setUploading(true);
     onUploadingChange(true);
-    setError(null);
-    for (const file of files) {
+    for (const file of accepted) {
       const result = await upload(file).catch(() => UPLOAD_FAILED);
       if (typeof result === "string") setError(`${file.name}: ${result}`);
       // Appended to the list as it is *now*, so removals or reorders made
@@ -114,7 +120,7 @@ export function ImagesEditor({ images, onChange, onUploadingChange }: Props) {
           type="file"
           accept={ACCEPTED_IMAGE_TYPES}
           multiple
-          disabled={uploading}
+          disabled={uploading || images.length >= MAX_PRODUCT_IMAGES}
           onChange={(e) => {
             const files = Array.from(e.target.files ?? []);
             e.target.value = "";
@@ -123,7 +129,8 @@ export function ImagesEditor({ images, onChange, onUploadingChange }: Props) {
         />
       </label>
       <p className={styles.hint}>
-        {IMAGE_FORMATS_LABEL}, máximo {MAX_IMAGE_MB} MB.
+        {IMAGE_FORMATS_LABEL}, máximo {MAX_IMAGE_MB} MB por foto y{" "}
+        {MAX_PRODUCT_IMAGES} fotos.
       </p>
       {error && <p className={styles.error}>{error}</p>}
     </fieldset>

@@ -26,6 +26,10 @@ const MIN_PASSES = 1;
 const MIN_PARALLELISM = 1;
 const MIN_MEMORY_KIB_PER_LANE = 8;
 const MAX_MEMORY_KIB = 1_048_576; // 1 GiB
+// Far above any sane setting, far below where a login would hang or Node
+// would throw (its limits are 2^32-1 passes and 2^24-1 lanes).
+const MAX_PASSES = 16;
+const MAX_PARALLELISM = 16;
 const MIN_SALT_BYTES = 8;
 const MIN_TAG_BYTES = 4;
 
@@ -71,7 +75,9 @@ function decode(encoded: string): DecodedHash | null {
   };
   const inRange =
     decoded.passes >= MIN_PASSES &&
+    decoded.passes <= MAX_PASSES &&
     decoded.parallelism >= MIN_PARALLELISM &&
+    decoded.parallelism <= MAX_PARALLELISM &&
     decoded.memory >= MIN_MEMORY_KIB_PER_LANE * decoded.parallelism &&
     decoded.memory <= MAX_MEMORY_KIB &&
     decoded.salt.length >= MIN_SALT_BYTES &&

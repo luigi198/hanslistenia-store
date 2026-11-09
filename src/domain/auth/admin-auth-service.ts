@@ -90,7 +90,11 @@ export class AdminAuthService {
       return { ok: false, reason: "invalid_credentials" };
     }
 
-    await attempts.clearAttempts(ipKey);
+    // Best effort: the credentials are already verified, and a stale counter
+    // only expires with its window, so a storage blip must not block sign-in.
+    await attempts.clearAttempts(ipKey).catch((error: unknown) => {
+      logger.warn("admin_login_attempts_reset_failed", { error });
+    });
     const session = createSessionToken({
       subject: this.subject,
       now,

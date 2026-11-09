@@ -12,6 +12,25 @@ export class InvalidSelectionError extends Error {
 }
 
 /**
+ * The label chosen for a group, or undefined. Own properties only, so a group
+ * named like an Object.prototype member ("constructor") is never "chosen".
+ */
+export function chosenLabel(
+  selection: OptionSelection,
+  groupName: string,
+): string | undefined {
+  return Object.hasOwn(selection, groupName) ? selection[groupName] : undefined;
+}
+
+/** True when every option group has a chosen value. */
+export function isSelectionComplete(
+  groups: readonly OptionGroup[],
+  selection: OptionSelection,
+): boolean {
+  return groups.every((g) => Boolean(chosenLabel(selection, g.name)));
+}
+
+/**
  * Unit price in integer colones: base price plus the delta of the value
  * chosen in every option group. Pure, so the product page can show it live
  * and checkout can recompute it server-side.
@@ -27,7 +46,8 @@ export function computeUnitPrice(
     }
   }
   return product.optionGroups.reduce((total, group) => {
-    const chosen = group.values.find((v) => v.label === selection[group.name]);
+    const label = chosenLabel(selection, group.name);
+    const chosen = group.values.find((v) => v.label === label);
     if (!chosen) {
       throw new InvalidSelectionError(`No valid value for: ${group.name}`);
     }

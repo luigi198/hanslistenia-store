@@ -1,5 +1,6 @@
 import type { Collection, Db } from "mongodb";
 import type { LoginAttemptStore } from "@/domain/ports/login-attempt-store";
+import { memoizeUntilSuccess } from "@/shared/memoize-until-success";
 
 export const LOGIN_ATTEMPTS_COLLECTION = "admin_login_attempts";
 
@@ -15,17 +16,10 @@ interface AttemptWindow {
  * and write also compares `expiresAt` with `now` itself.
  */
 export class MongoLoginAttemptStore implements LoginAttemptStore {
-  private ready: Promise<Collection<AttemptWindow>> | undefined;
+  // Index setup runs once per instance; a failure is retried next call.
+  private readonly collection = memoizeUntilSuccess(() => this.init());
 
   constructor(private readonly getDb: () => Promise<Db>) {}
-
-  private collection(): Promise<Collection<AttemptWindow>> {
-    this.ready ??= this.init().catch((error: unknown) => {
-      this.ready = undefined; // retry index setup on the next call
-      throw error;
-    });
-    return this.ready;
-  }
 
   private async init(): Promise<Collection<AttemptWindow>> {
     const db = await this.getDb();

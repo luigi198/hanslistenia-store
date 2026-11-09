@@ -46,6 +46,8 @@ describe("password hashing (argon2id)", () => {
     ["argon2id:v=19:m=19456,t=2,p=1:AA:AAAAAAAAAAA"], // salt < 8 bytes
     ["argon2id:v=19:m=19456,t=2,p=1:AAAAAAAAAAA:AA"], // tag < 4 bytes
     ["argon2id:v=19:m=99999999999,t=2,p=1:AAAAAAAAAAA:AAAAAAAAAAA"], // absurd memory
+    ["argon2id:v=19:m=19456,t=99999999999,p=1:AAAAAAAAAAA:AAAAAAAAAAA"], // absurd passes
+    ["argon2id:v=19:m=1048576,t=2,p=99999:AAAAAAAAAAA:AAAAAAAAAAA"], // absurd lanes
   ])("treats a malformed hash as non-matching: %j", async (bad) => {
     expect(isPasswordHash(bad)).toBe(false);
     await expect(verifyPassword("pw", bad)).resolves.toBe(false);

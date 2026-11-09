@@ -12,6 +12,7 @@ import {
   type ProductChanges,
   type ProductRepository,
 } from "@/domain/ports/product-repository";
+import { memoizeUntilSuccess } from "@/shared/memoize-until-success";
 
 export const PRODUCTS_COLLECTION = "products";
 const DUPLICATE_KEY_ERROR = 11000;
@@ -30,17 +31,10 @@ function toObjectId(id: string): ObjectId | null {
 }
 
 export class MongoProductRepository implements ProductRepository {
-  private ready: Promise<Collection<ProductDoc>> | undefined;
+  // Index setup runs once per instance; a failure is retried next call.
+  private readonly collection = memoizeUntilSuccess(() => this.init());
 
   constructor(private readonly getDb: () => Promise<Db>) {}
-
-  private collection(): Promise<Collection<ProductDoc>> {
-    this.ready ??= this.init().catch((error: unknown) => {
-      this.ready = undefined; // retry index setup on the next call
-      throw error;
-    });
-    return this.ready;
-  }
 
   private async init(): Promise<Collection<ProductDoc>> {
     const collection = (await this.getDb()).collection<ProductDoc>(

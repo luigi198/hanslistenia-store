@@ -1,6 +1,7 @@
 import {
   MAX_IMAGE_BYTES,
   PRODUCT_IMAGE_TYPES,
+  PRODUCT_LIMITS,
 } from "@/domain/products/product";
 
 // User-facing wording derived from the domain's photo rules, so the picker,
@@ -15,3 +16,5 @@ export const ACCEPTED_IMAGE_TYPES = Object.keys(PRODUCT_IMAGE_TYPES).join(",");
 /** e.g. "JPG, PNG, WEBP o AVIF" */
 export const IMAGE_FORMATS_LABEL = `${extensions.slice(0, -1).join(", ")} o ${extensions.at(-1)}`;
 export const MAX_IMAGE_MB = MAX_IMAGE_BYTES / BYTES_PER_MB;
+/** Photos one product can have (the server rejects more on save). */
+export const MAX_PRODUCT_IMAGES = PRODUCT_LIMITS.images;

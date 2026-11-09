@@ -182,6 +182,15 @@ describe("AdminAuthService.login", () => {
     expect(lines.length).toBeGreaterThan(0);
   });
 
+  it("still signs in when resetting the attempt counter fails, and logs it", async () => {
+    const store = new InMemoryAttemptStore();
+    store.clearAttempts = () => Promise.reject(new Error("mongo blip"));
+    const { service, lines } = setup(store);
+    const result = await service.login(attempt(PASSWORD));
+    expect(result.ok).toBe(true);
+    expect(lines.join("\n")).toContain("admin_login_attempts_reset_failed");
+  });
+
   it("fails closed when the attempt store is unavailable", async () => {
     const broken: LoginAttemptStore = {
       registerAttempt: () => Promise.reject(new Error("mongo down")),

@@ -1,12 +1,11 @@
+import { stripDiacritics } from "@/shared/text";
+
 const MAX_SLUG_LENGTH = 80;
 const FALLBACK_SLUG = "producto";
-const COMBINING_MARKS = /[̀-ͯ]/g;
 
 /** URL slug from a product name: lowercase ASCII words joined by dashes. */
 export function slugify(name: string): string {
-  const slug = name
-    .normalize("NFD") // "á" → "a" + combining accent, removed next
-    .replace(COMBINING_MARKS, "")
+  const slug = stripDiacritics(name)
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .slice(0, MAX_SLUG_LENGTH)
