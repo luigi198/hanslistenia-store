@@ -1,18 +1,12 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { E2E_ADMIN } from "./admin-credentials";
+import { logIn } from "./helpers";
 
 const SESSION_HOURS = 8;
 const HOUR_SECONDS = 3600;
 
 // Own client IP so rate-limit state never leaks between tests.
 test.use({ extraHTTPHeaders: { "x-forwarded-for": "198.51.100.10" } });
-
-async function logIn(page: Page, username: string, password: string) {
-  await page.goto("/admin/login");
-  await page.getByLabel("Usuario").fill(username);
-  await page.getByLabel("Contraseña").fill(password);
-  await page.getByRole("button", { name: "Ingresar" }).click();
-}
 
 test("admin logs in, reaches the panel and logs out", async ({
   page,

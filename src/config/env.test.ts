@@ -9,6 +9,7 @@ const VALID = {
   AWS_SECRET_ACCESS_KEY: "super-secret-value",
   S3_RECEIPTS_BUCKET: "hl-receipts",
   S3_PRODUCTS_BUCKET: "hl-products",
+  S3_PRODUCTS_PUBLIC_URL: "https://hl-products.s3.us-east-1.amazonaws.com",
   ADMIN_USERNAME: "hans",
   ADMIN_PASSWORD_HASH:
     "argon2id:v=19:m=19456,t=2,p=1:c2FsdHNhbHRzYWx0c2FsdA:aGFzaGhhc2hoYXNoaGFzaGhhc2hoYXNoaGFzaGhhc2g",
@@ -59,6 +60,30 @@ describe("parseEnv", () => {
     expect(() => parseEnv({ ...VALID, SESSION_SECRET: "short" })).toThrow(
       /SESSION_SECRET/,
     );
+  });
+
+  it("rejects an S3_PRODUCTS_PUBLIC_URL that is not an http(s) URL", () => {
+    expect(() =>
+      parseEnv({ ...VALID, S3_PRODUCTS_PUBLIC_URL: "hl-products" }),
+    ).toThrow(/S3_PRODUCTS_PUBLIC_URL/);
+  });
+
+  it("strips a trailing slash from S3_PRODUCTS_PUBLIC_URL", () => {
+    const env = parseEnv({
+      ...VALID,
+      S3_PRODUCTS_PUBLIC_URL: "https://cdn.example.com/",
+    });
+    expect(env.S3_PRODUCTS_PUBLIC_URL).toBe("https://cdn.example.com");
+  });
+
+  it("treats S3_ENDPOINT as optional but validates it when set", () => {
+    expect(parseEnv(VALID).S3_ENDPOINT).toBeUndefined();
+    expect(() => parseEnv({ ...VALID, S3_ENDPOINT: "nope" })).toThrow(
+      /S3_ENDPOINT/,
+    );
+    expect(
+      parseEnv({ ...VALID, S3_ENDPOINT: "http://127.0.0.1:9191" }).S3_ENDPOINT,
+    ).toBe("http://127.0.0.1:9191");
   });
 
   it("never includes secret values in the error message", () => {

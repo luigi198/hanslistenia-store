@@ -36,6 +36,7 @@ describe("npm run admin:credentials", () => {
         AWS_SECRET_ACCESS_KEY: "x",
         S3_RECEIPTS_BUCKET: "x",
         S3_PRODUCTS_BUCKET: "x",
+        S3_PRODUCTS_PUBLIC_URL: "https://x.example.com",
         ...env,
       }),
     ).not.toThrow();

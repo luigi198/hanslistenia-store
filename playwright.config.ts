@@ -15,6 +15,8 @@ const E2E_ENV = {
   AWS_SECRET_ACCESS_KEY: "e2e-placeholder",
   S3_RECEIPTS_BUCKET: "e2e-receipts",
   S3_PRODUCTS_BUCKET: "e2e-products",
+  // TODO(photos E2E): point at an s3mock container — see e2e/catalog.spec.ts.
+  S3_PRODUCTS_PUBLIC_URL: "http://127.0.0.1:9/e2e-products",
   ADMIN_USERNAME: E2E_ADMIN.username,
   ADMIN_PASSWORD_HASH: E2E_ADMIN.passwordHash,
   SESSION_SECRET: "e2e-session-secret-not-secret-0123456789",

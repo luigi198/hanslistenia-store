@@ -5,6 +5,7 @@ import { LOG_LEVELS } from "@/shared/logger";
 const MONGODB_URI_PATTERN = /^mongodb(\+srv)?:\/\//;
 
 const nonEmpty = z.string().trim().min(1);
+const httpUrl = z.url({ protocol: /^https?$/ });
 
 const envSchema = z.object({
   MONGODB_URI: nonEmpty.regex(MONGODB_URI_PATTERN),
@@ -14,6 +15,10 @@ const envSchema = z.object({
   AWS_SECRET_ACCESS_KEY: nonEmpty,
   S3_RECEIPTS_BUCKET: nonEmpty,
   S3_PRODUCTS_BUCKET: nonEmpty,
+  // Base URL product photos are served from (bucket URL or a CDN in front).
+  S3_PRODUCTS_PUBLIC_URL: httpUrl.transform((url) => url.replace(/\/+$/, "")),
+  // Only for S3-compatible local mocks; unset in production (real AWS).
+  S3_ENDPOINT: httpUrl.optional(),
   ADMIN_USERNAME: nonEmpty,
   ADMIN_PASSWORD_HASH: nonEmpty.refine(isPasswordHash),
   SESSION_SECRET: nonEmpty.min(MIN_SESSION_SECRET_LENGTH),

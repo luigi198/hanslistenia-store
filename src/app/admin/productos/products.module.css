@@ -1,0 +1,158 @@
+.page {
+  width: min(100%, 48rem);
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.375rem;
+  font-weight: 500;
+}
+
+.form input,
+.form textarea,
+.form button,
+.page button {
+  font: inherit;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 25%, transparent);
+  border-radius: 0.5rem;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.form button,
+.page button {
+  cursor: pointer;
+}
+
+.primary,
+.form .primary {
+  font-weight: 600;
+  padding: 0.625rem 1rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: var(--foreground);
+  color: var(--background);
+  text-decoration: none;
+}
+
+.fieldset {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  border-radius: 0.75rem;
+}
+
+.fieldset legend {
+  font-weight: 600;
+  padding: 0 0.25rem;
+}
+
+.group {
+  display: grid;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed
+    color-mix(in srgb, var(--foreground) 15%, transparent);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.row input {
+  flex: 1 1 8rem;
+  min-width: 0;
+}
+
+.row input[type="number"] {
+  flex: 0 1 8rem;
+}
+
+.images {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.image {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.image img {
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.upload {
+  justify-self: start;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed currentColor;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.upload input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.hint {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+.error,
+.errors {
+  color: #c62828;
+}
+
+.errors {
+  padding-left: 1.25rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--foreground) 12%, transparent);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
