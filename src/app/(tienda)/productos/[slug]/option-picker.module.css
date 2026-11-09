@@ -1,0 +1,87 @@
+.picker {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.price {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 800;
+  font-stretch: 112%;
+  font-variant-numeric: tabular-nums;
+}
+
+.group {
+  border: 0;
+  display: grid;
+  gap: 0.625rem;
+}
+
+.legend {
+  font-weight: 700;
+  margin-bottom: 0.625rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  position: relative;
+  display: inline-grid;
+  justify-items: center;
+  align-content: center;
+  min-width: 3.25rem;
+  min-height: 3.25rem;
+  padding: 0.5rem 0.875rem;
+  border: 2px solid var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* The radio stays in the accessibility tree; the chip is its visual. */
+.chip input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.chip:has(input:checked) {
+  background: var(--ink);
+  color: var(--chalk);
+}
+
+.chip:has(input:focus-visible) {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.chip:hover:not(:has(input:checked)) {
+  background: var(--concrete);
+}
+
+.delta {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cta {
+  display: block;
+  text-align: center;
+  padding: 1.125rem 1.5rem;
+  background: var(--ink);
+  color: var(--chalk);
+  font-weight: 800;
+  font-stretch: 115%;
+  font-size: 1.0625rem;
+  text-decoration: none;
+  border: 2px solid var(--ink);
+}
+
+.cta:hover {
+  background: var(--chalk);
+  color: var(--ink);
+}

@@ -1,0 +1,35 @@
+.card {
+  display: grid;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--concrete);
+}
+
+.photo img {
+  object-fit: cover;
+}
+
+.name {
+  margin-top: 0.5rem;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  font-stretch: 112%;
+  line-height: 1.2;
+}
+
+.card:hover .name {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.price {
+  color: var(--steel);
+  font-variant-numeric: tabular-nums;
+}

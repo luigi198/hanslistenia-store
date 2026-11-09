@@ -5,7 +5,10 @@ test("home page renders in Spanish with the store name", async ({ page }) => {
   expect(response?.status()).toBe(200);
   await expect(page.locator("html")).toHaveAttribute("lang", "es-CR");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Hanslistenia",
+    "Disciplina y movimiento.",
   );
+  await expect(
+    page.getByRole("banner").getByRole("img", { name: "Hanslistenia" }),
+  ).toBeVisible();
   await expect(page).toHaveTitle(/Hanslistenia/);
 });

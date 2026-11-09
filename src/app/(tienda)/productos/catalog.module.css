@@ -1,0 +1,101 @@
+.page {
+  width: 100%;
+  max-width: var(--column);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 5rem) var(--gutter) clamp(4rem, 9vw, 7rem);
+}
+
+.intro {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.title {
+  font-size: clamp(2.75rem, 7vw, 5.5rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.lede {
+  max-width: 36rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--steel);
+}
+
+.empty {
+  max-width: 36rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+/* Product page */
+
+.back {
+  display: inline-block;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.product {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+@media (min-width: 860px) {
+  .product {
+    grid-template-columns: 1.1fr 1fr;
+    align-items: start;
+  }
+
+  .details {
+    position: sticky;
+    top: 2rem;
+  }
+}
+
+.gallery {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--concrete);
+}
+
+.photo img {
+  object-fit: cover;
+}
+
+/* The details hang from the bar, like the products in the catalog. */
+.details {
+  display: grid;
+  gap: 1.5rem;
+  border-top: var(--bar) solid var(--ink);
+  padding-top: 1.5rem;
+}
+
+.name {
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 1;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.note {
+  color: var(--steel);
+}
+
+.description {
+  max-width: 34rem;
+  line-height: 1.6;
+  white-space: pre-line;
+}

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { PhotoPlaceholder } from "../../_components/photo-placeholder";
 import { getPublicProduct } from "../_lib/catalog";
 import styles from "../catalog.module.css";
 import { OptionPicker } from "./option-picker";
@@ -27,7 +28,9 @@ export default function ProductPage({
 }: PageProps<"/productos/[slug]">) {
   return (
     <main className={styles.page}>
-      <Link href="/productos">← Todos los productos</Link>
+      <Link href="/productos" className={styles.back}>
+        Todos los productos
+      </Link>
       {/* Unlisted slugs get the shell first; Next caches the full page after. */}
       <Suspense fallback={<p>Cargando…</p>}>
         <ProductDetails params={params} />
@@ -46,27 +49,25 @@ async function ProductDetails({
     <article className={styles.product}>
       <div className={styles.gallery}>
         {product.imageUrls.length === 0 ? (
-          <div className={styles.cover}>
-            <span aria-hidden className={styles.placeholder}>
-              H
-            </span>
+          <div className={styles.photo}>
+            <PhotoPlaceholder />
           </div>
         ) : (
           product.imageUrls.map((url, i) => (
-            <div key={url} className={styles.cover}>
+            <div key={url} className={styles.photo}>
               <Image
                 src={url}
                 alt={`${product.name}, foto ${i + 1}`}
                 fill
                 priority={i === 0}
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 860px) 100vw, 55vw"
               />
             </div>
           ))
         )}
       </div>
       <div className={styles.details}>
-        <h1>{product.name}</h1>
+        <h1 className={styles.name}>{product.name}</h1>
         <OptionPicker
           productName={product.name}
           basePrice={product.basePrice}

@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+// One family: the width axis gives expanded headlines (echoing the logo's
+// wide wordmark) and normal-width body text.
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  axes: ["wdth"],
+});
 
 const STORE_NAME = "Hanslistenia";
 
@@ -14,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-CR" className={geistSans.variable}>
+    <html lang="es-CR" className={archivo.variable}>
       <body>{children}</body>
     </html>
   );

@@ -1,6 +1,16 @@
 :root {
+  /* Admin (follows the OS theme) */
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Storefront brand: the logo is pure black on white, so is the store. */
+  --ink: #000000;
+  --chalk: #ffffff;
+  --concrete: #d3d2ce;
+  --steel: #5f5f5c;
+  --bar: 10px; /* the pull-up bar / clothing rail: the one structural device */
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --column: 75rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,8 +35,13 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-archivo), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
 }
 
 .home {

@@ -1,0 +1,20 @@
+.rail {
+  list-style: none;
+  display: grid;
+  /* Two per row on phones (a rack, not a feed); wider screens fit more.
+     auto-fit stretches a short row, so the rail never ends in an empty slot. */
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 0;
+  row-gap: 3.5rem;
+}
+
+@media (min-width: 640px) {
+  .rail {
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  }
+}
+
+.slot {
+  border-top: var(--bar) solid var(--ink);
+  padding: 1.5rem clamp(0.5rem, 1.5vw, 1rem) 0;
+}

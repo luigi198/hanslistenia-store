@@ -1,0 +1,91 @@
+.store {
+  --text: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+  background: var(--chalk);
+  /* The storefront keeps the brand's black-on-white in every OS theme. */
+  color-scheme: light;
+}
+
+/* Zero specificity so component classes (buttons, nav) always win. */
+:where(.store a) {
+  color: inherit;
+}
+
+/* The header hangs from the bar. */
+.header {
+  border-top: var(--bar) solid var(--ink);
+}
+
+.headerInner {
+  max-width: var(--column);
+  margin: 0 auto;
+  padding: 1.25rem var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.wordmark {
+  display: block;
+  width: clamp(8.5rem, 22vw, 15rem);
+}
+
+.wordmark img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.nav {
+  display: flex;
+  gap: clamp(1rem, 3vw, 1.75rem);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.nav a {
+  text-decoration: none;
+  padding-block: 0.25rem;
+  border-bottom: 2px solid transparent;
+}
+
+.nav a:hover {
+  border-bottom-color: var(--ink);
+}
+
+.footer {
+  margin-top: auto;
+  background: var(--ink);
+  color: var(--chalk);
+}
+
+.footer a {
+  color: var(--chalk);
+}
+
+.footerInner {
+  max-width: var(--column);
+  margin: 0 auto;
+  padding: 3.5rem var(--gutter) 2.5rem;
+  display: grid;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.footerMark {
+  width: 12rem;
+  height: auto;
+  filter: invert(1);
+  margin-bottom: 0.75rem;
+}
+
+.legal {
+  margin-top: 1.5rem;
+  color: #a3a3a0;
+  font-size: 0.8125rem;
+}

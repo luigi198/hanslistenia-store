@@ -57,8 +57,8 @@ test("admin creates a product; visitors see it and its price follows the options
   await expect(page.getByText("Lista en 2 semanas")).toBeVisible();
   const shownPrice = page.getByTestId("price");
   await expect(shownPrice).toHaveText(price("Desde ₡12 000"));
-  await page.getByLabel("Talla").selectOption("XL");
+  await page.getByRole("radio", { name: "XL" }).check();
   await expect(shownPrice).toHaveText(price("₡14 000"));
-  await page.getByLabel("Talla").selectOption("S");
+  await page.getByRole("radio", { name: "S", exact: true }).check();
   await expect(shownPrice).toHaveText(price("₡12 000"));
 });

@@ -5,7 +5,7 @@ import { formatCRC } from "@/app/_lib/format";
 import { whatsappLink } from "@/app/_lib/store-info";
 import type { OptionGroup } from "@/domain/products/product";
 import { computeUnitPrice } from "@/domain/products/price";
-import styles from "../catalog.module.css";
+import styles from "./option-picker.module.css";
 
 interface Props {
   productName: string;
@@ -14,7 +14,7 @@ interface Props {
   optionGroups: OptionGroup[];
 }
 
-/** Option selects with the price for the current choice. */
+/** Square option chips (a radio group per option) and the live price. */
 export function OptionPicker({
   productName,
   basePrice,
@@ -33,32 +33,35 @@ export function OptionPicker({
     .join(", ");
 
   return (
-    <div className={styles.purchase}>
+    <div className={styles.picker}>
       <p className={styles.price} aria-live="polite" data-testid="price">
         {price === null ? `Desde ${formatCRC(fromPrice)}` : formatCRC(price)}
       </p>
       {optionGroups.map((group) => (
-        <label key={group.name} className={styles.option}>
-          {group.name}
-          <select
-            value={selection[group.name] ?? ""}
-            onChange={(e) =>
-              setSelection((s) => ({ ...s, [group.name]: e.target.value }))
-            }
-          >
-            <option value="" disabled>
-              Elija {group.name.toLowerCase()}
-            </option>
+        <fieldset key={group.name} className={styles.group}>
+          <legend className={styles.legend}>{group.name}</legend>
+          <div className={styles.chips}>
             {group.values.map((value) => (
-              <option key={value.label} value={value.label}>
-                {value.label}
-                {value.priceDelta > 0
-                  ? ` (+${formatCRC(value.priceDelta)})`
-                  : ""}
-              </option>
+              <label key={value.label} className={styles.chip}>
+                <input
+                  type="radio"
+                  name={group.name}
+                  value={value.label}
+                  checked={selection[group.name] === value.label}
+                  onChange={() =>
+                    setSelection((s) => ({ ...s, [group.name]: value.label }))
+                  }
+                />
+                <span>{value.label}</span>
+                {value.priceDelta > 0 && (
+                  <span className={styles.delta}>
+                    +{formatCRC(value.priceDelta)}
+                  </span>
+                )}
+              </label>
             ))}
-          </select>
-        </label>
+          </div>
+        </fieldset>
       ))}
       <a
         className={styles.cta}

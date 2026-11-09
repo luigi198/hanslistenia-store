@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "admin:credentials": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/admin-credentials.mts"
+    "admin:credentials": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/admin-credentials.mts",
+    "seed:demo": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seed-demo.mts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1164.0",
