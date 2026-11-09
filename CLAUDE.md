@@ -31,6 +31,17 @@ specific to this project.
 - Next.js 16 differs from older versions; see `AGENTS.md` and read the bundled
   docs in `node_modules/next/dist/docs/` before using an unfamiliar API.
 
+## Infrastructure (`infra/`, Terraform)
+
+- AWS account `hanslistenia` (695646786339), local profile `hanslistenia`
+  (IAM Identity Center; `aws sso login --profile hanslistenia`). The provider
+  is pinned to that account with `allowed_account_ids`.
+- One stack, local state (`infra/terraform.tfstate`, gitignored). The state
+  holds the app's access key: keep it private, never commit or paste it.
+- Creates both buckets, their CORS (browser uploads) and the
+  `hanslistenia-app` IAM user. Values for env vars: `terraform output`;
+  secret: `terraform output -raw AWS_SECRET_ACCESS_KEY` (in your own terminal).
+
 ## Commands (npm, Node ≥ 24)
 
 ```

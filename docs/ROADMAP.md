@@ -22,8 +22,11 @@ when done. Design decisions live in `/CLAUDE.md`.
       `domain/` from importing storage/framework code.
 - [x] Env var validation at startup (Zod) with a documented `.env.example`.
 - [x] Mongo client singleton; S3 client; structured logger (JSON, no PII).
-- [ ] Vercel project + preview deploys; Atlas cluster; S3 buckets (private
-      receipts, public product images) with least-privilege IAM user.
+- [x] S3 buckets (private receipts, public product images) with
+      least-privilege IAM user — Terraform in `infra/`, AWS account
+      `hanslistenia` (695646786339).
+- [ ] Vercel project + preview deploys (then add its URL to
+      `upload_origins` in `infra/variables.tf`); Atlas cluster.
 - [x] Document `dev`/`test`/`lint`/`typecheck` commands in `CLAUDE.md`.
 
 ## Phase 2 — Admin auth
@@ -37,10 +40,12 @@ when done. Design decisions live in `/CLAUDE.md`.
 
 ## Phase 3 — Products & catalog
 
-- [ ] Product domain model (option groups, price deltas, integer CRC) + tests.
-- [ ] Admin CRUD: create/edit/hide products, upload/reorder images.
-- [ ] Public catalog and product pages (static + revalidate on edit).
-- [ ] Option selection and computed price on the product page.
+- [x] Product domain model (option groups, price deltas, integer CRC) + tests.
+- [x] Admin CRUD: create/edit/hide products, upload/reorder images.
+- [x] Public catalog and product pages (static + revalidate on edit).
+- [x] Option selection and computed price on the product page.
+- [ ] TODO: E2E for product photos (upload/reorder/remove) against an s3mock
+      container — steps in the TODO at the top of `e2e/catalog.spec.ts`.
 
 ## Phase 4 — Checkout & SINPE payment
 
@@ -56,6 +61,8 @@ when done. Design decisions live in `/CLAUDE.md`.
       (presigned GET), confirm / reject with reason / cancel / complete;
       "Contactar por WhatsApp" link to buyer.
 - [ ] Privacy notice page; 6-month retention/purge job (Vercel Cron).
+- [ ] Same cron: delete product photos in S3 that no product references and
+      are older than a day (uploaded but never saved, e.g. form cancelled).
 
 ## Phase 5 — Emails
 
