@@ -9,8 +9,8 @@ when done. Design decisions live in `/CLAUDE.md`.
 - [x] Domain name: `hanslistenia.com` (bought).
 - [x] Logo as SVG: `public/hanslistenia_logo.svg` (wide 2:1 trace — a square
       mark is still needed for the favicon).
-- [ ] Coach contact: SINPE Móvil and WhatsApp are both `7255-4101`; SINPE
-      account name: Hans Barrantes Gomez. Still missing: coach email.
+- [x] Coach contact: SINPE Móvil and WhatsApp are both `7255-4101`; SINPE
+      account name: Hans Barrantes Gomez; email: `barstilldeath@gmail.com`.
 - [ ] Shipping cost policy — open; keep the notice + "ask first" via WhatsApp.
 - [x] Retention period: 6 months for receipts and buyer personal data.
 - [x] Copy tone: "usted".
@@ -28,12 +28,12 @@ when done. Design decisions live in `/CLAUDE.md`.
 
 ## Phase 2 — Admin auth
 
-- [ ] Login with username + password (argon2id hash from env) + TOTP.
-- [ ] Script to generate the password hash and the TOTP secret/QR.
-- [ ] Rate limiting + lockout (Mongo, TTL index).
-- [ ] Signed session cookie; server-side session check helper used by every
+- [x] Login with username + password (argon2id hash from env). No TOTP.
+- [x] Script to generate a strong password, its hash and the session secret.
+- [x] Rate limiting + lockout (Mongo, TTL index).
+- [x] Signed session cookie; server-side session check helper used by every
       admin action/route.
-- [ ] Logout; `noindex` on admin.
+- [x] Logout; `noindex` on admin.
 
 ## Phase 3 — Products & catalog
 
@@ -63,6 +63,7 @@ when done. Design decisions live in `/CLAUDE.md`.
 - [ ] Buyer: order created, payment confirmed, payment rejected.
 - [ ] Coach: receipt uploaded.
 - [ ] Email failure is logged, never fails the operation.
+- [ ] Admin second factor: 6-digit login code emailed to the coach.
 
 ## Phase 6 — SEO & launch polish
 

@@ -9,6 +9,10 @@ const VALID = {
   AWS_SECRET_ACCESS_KEY: "super-secret-value",
   S3_RECEIPTS_BUCKET: "hl-receipts",
   S3_PRODUCTS_BUCKET: "hl-products",
+  ADMIN_USERNAME: "hans",
+  ADMIN_PASSWORD_HASH:
+    "argon2id:v=19:m=19456,t=2,p=1:c2FsdHNhbHRzYWx0c2FsdA:aGFzaGhhc2hoYXNoaGFzaGhhc2hoYXNoaGFzaGhhc2g",
+  SESSION_SECRET: "x".repeat(32),
 };
 
 describe("parseEnv", () => {
@@ -42,6 +46,18 @@ describe("parseEnv", () => {
   it("rejects an unknown LOG_LEVEL", () => {
     expect(() => parseEnv({ ...VALID, LOG_LEVEL: "verbose" })).toThrow(
       /LOG_LEVEL/,
+    );
+  });
+
+  it("rejects an ADMIN_PASSWORD_HASH that is not an encoded argon2id hash", () => {
+    expect(() =>
+      parseEnv({ ...VALID, ADMIN_PASSWORD_HASH: "plain-password" }),
+    ).toThrow(/ADMIN_PASSWORD_HASH/);
+  });
+
+  it("rejects a SESSION_SECRET shorter than 32 characters", () => {
+    expect(() => parseEnv({ ...VALID, SESSION_SECRET: "short" })).toThrow(
+      /SESSION_SECRET/,
     );
   });
 

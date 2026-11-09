@@ -32,6 +32,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# Real secrets (admin password hash, session secret, DB/AWS keys). Listed
+# explicitly so it stays ignored even if the pattern above is narrowed.
+.env.local
 
 # vercel
 .vercel

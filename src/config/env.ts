@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { isPasswordHash } from "@/domain/auth/password";
+import { MIN_SESSION_SECRET_LENGTH } from "@/domain/auth/session-token";
 import { LOG_LEVELS } from "@/shared/logger";
 const MONGODB_URI_PATTERN = /^mongodb(\+srv)?:\/\//;
 
@@ -12,6 +14,9 @@ const envSchema = z.object({
   AWS_SECRET_ACCESS_KEY: nonEmpty,
   S3_RECEIPTS_BUCKET: nonEmpty,
   S3_PRODUCTS_BUCKET: nonEmpty,
+  ADMIN_USERNAME: nonEmpty,
+  ADMIN_PASSWORD_HASH: nonEmpty.refine(isPasswordHash),
+  SESSION_SECRET: nonEmpty.min(MIN_SESSION_SECRET_LENGTH),
   LOG_LEVEL: z.enum(LOG_LEVELS).default("info"),
 });
 

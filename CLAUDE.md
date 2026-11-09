@@ -35,8 +35,12 @@ specific to this project.
 
 ```
 npm run dev           # local dev server (needs .env.local, see .env.example)
-npm test              # Vitest unit tests (src/**/*.test.ts)
-npm run test:e2e      # Playwright; builds and starts the app with placeholder env
+npm test              # Vitest (src/**/*.test.ts, scripts/**/*.test.ts); needs
+                      # Docker for a throwaway Mongo on port 27121, or set
+                      # MONGODB_TEST_URI to use an existing one
+npm run test:e2e      # Playwright; builds/starts the app, needs Docker (throwaway
+                      # Mongo on port 27120, see test-support/mongo-container.ts)
+npm run admin:credentials <username>  # admin password + hash + session secret
 npm run lint          # ESLint, including layer-boundary rules
 npm run typecheck     # next typegen + tsc
 npm run format        # Prettier (format:check in CI)
@@ -120,10 +124,15 @@ Invalid transitions are rejected with a typed error.
 ## Admin (single user)
 
 - Credentials come from env vars: `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`
-  (argon2id hash — never the plain password), `ADMIN_TOTP_SECRET`.
-- Login requires password **and** TOTP code.
-- Failed attempts are rate-limited and locked out per IP/username (state in Mongo
-  with a TTL index).
+  (argon2id hash via Node's built-in `crypto.argon2` — never the plain
+  password), `SESSION_SECRET` (cookie signing key). Generate them with
+  `npm run admin:credentials`; the password is generated, never user-chosen.
+- Login is username + password only (owner's decision, no TOTP). A second
+  factor — a code emailed to the coach — is planned once emails exist; keep
+  the login flow easy to extend with a second step.
+- Failed attempts are rate-limited per client IP (IPv6 per /64), counted
+  atomically before the password is checked (state in Mongo with a TTL index).
+  No per-username lockout: it would let anyone lock the coach out.
 - Session: signed cookie, `httpOnly`, `Secure`, `SameSite=Strict`, short expiry.
 - Every admin route handler and server action re-checks the session server-side.
   Middleware alone is not enough.
