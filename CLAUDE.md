@@ -59,6 +59,10 @@ npm run format        # Prettier (format:check in CI)
 
 Run `test`, `lint`, `typecheck` and `format:check` before considering work done.
 
+A git pre-commit hook (`.githooks/pre-commit`) runs `npm run lint` and blocks
+the commit on errors. `npm install` enables it (`prepare` sets
+`core.hooksPath`). Fix lint errors instead of bypassing with `--no-verify`.
+
 ## Architecture (layers)
 
 ```
