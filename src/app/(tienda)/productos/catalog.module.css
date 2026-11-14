@@ -57,11 +57,6 @@
   }
 }
 
-.gallery {
-  display: grid;
-  gap: 0.75rem;
-}
-
 .photo {
   position: relative;
   aspect-ratio: 4 / 5;

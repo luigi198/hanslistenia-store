@@ -1,0 +1,96 @@
+.carousel {
+  position: relative;
+}
+
+/* Native swipe: one photo per "page", snapping into place. */
+.track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  scroll-snap-align: start;
+  background: var(--concrete);
+}
+
+.slide img {
+  object-fit: cover;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: none;
+  background: var(--ink);
+  color: var(--chalk);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.arrow:focus-visible,
+.dot:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.previous {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.75rem;
+}
+
+.dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Bars, not circles: same language as the rail above the products. */
+.dot {
+  width: 1.75rem;
+  height: 0.375rem;
+  padding: 0;
+  border: none;
+  background: var(--concrete);
+  cursor: pointer;
+}
+
+.dot[aria-current="true"] {
+  background: var(--ink);
+}
+
+.counter {
+  color: var(--steel);
+  font-variant-numeric: tabular-nums;
+}

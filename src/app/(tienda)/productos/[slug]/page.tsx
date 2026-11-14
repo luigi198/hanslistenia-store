@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -7,6 +6,7 @@ import { PhotoPlaceholder } from "../../_components/photo-placeholder";
 import { getPublicProduct } from "../_lib/catalog";
 import styles from "../catalog.module.css";
 import { OptionPicker } from "./option-picker";
+import { PhotoCarousel } from "./photo-carousel";
 
 const DESCRIPTION_PREVIEW_LENGTH = 160;
 
@@ -47,25 +47,16 @@ async function ProductDetails({
 
   return (
     <article className={styles.product}>
-      <div className={styles.gallery}>
-        {product.imageUrls.length === 0 ? (
-          <div className={styles.photo}>
-            <PhotoPlaceholder />
-          </div>
-        ) : (
-          product.imageUrls.map((url, i) => (
-            <div key={url} className={styles.photo}>
-              <Image
-                src={url}
-                alt={`${product.name}, foto ${i + 1}`}
-                fill
-                priority={i === 0}
-                sizes="(max-width: 860px) 100vw, 55vw"
-              />
-            </div>
-          ))
-        )}
-      </div>
+      {product.imageUrls.length === 0 ? (
+        <div className={styles.photo}>
+          <PhotoPlaceholder />
+        </div>
+      ) : (
+        <PhotoCarousel
+          productName={product.name}
+          imageUrls={product.imageUrls}
+        />
+      )}
       <div className={styles.details}>
         <h1 className={styles.name}>{product.name}</h1>
         <OptionPicker
