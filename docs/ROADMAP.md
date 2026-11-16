@@ -77,7 +77,9 @@ when done. Design decisions live in `/CLAUDE.md`.
 - [ ] Metadata, canonical URLs, OG images, JSON-LD (`Product`, `Offer`,
       `Organization`).
 - [ ] `sitemap.ts`, `robots.ts`; Lighthouse pass (performance, a11y, SEO).
-- [ ] Home + "Sobre el coach" page with real content.
+- [x] "Sobre el coach" page (`/sobre-el-coach`) with the coach's bio and
+      photos.
+- [ ] Home with final real content.
 - [ ] Custom domain, Google Search Console, Resend domain verification.
 - [ ] E2E happy path: browse → order → upload receipt → admin confirms →
       buyer sees confirmed status.

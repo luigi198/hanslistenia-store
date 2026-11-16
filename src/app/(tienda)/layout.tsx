@@ -23,6 +23,7 @@ export default function StoreLayout({ children }: LayoutProps<"/">) {
           </Link>
           <nav className={styles.nav} aria-label="Principal">
             <Link href="/productos">Productos</Link>
+            <Link href="/sobre-el-coach">El coach</Link>
             <a
               href={whatsappLink(WHATSAPP_GREETING)}
               target="_blank"
