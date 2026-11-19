@@ -1,8 +1,19 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { pageMetadata } from "@/app/_lib/seo";
+import { organizationJsonLd, websiteJsonLd } from "@/app/_lib/structured-data";
+import { JsonLd } from "./_components/json-ld";
 import { ProductRail } from "./_components/product-rail";
 import styles from "./home.module.css";
 import { getCatalog } from "./productos/_lib/catalog";
+
+export const metadata: Metadata = pageMetadata({
+  title: { absolute: "Hanslistenia — Ropa de calistenia en Costa Rica" },
+  description:
+    "Ropa de calistenia y street workout hecha a pedido en Costa Rica. Elija su prenda, pague por SINPE Móvil y coordinamos la entrega por WhatsApp.",
+  path: "/",
+});
 
 const FEATURED_COUNT = 3;
 
@@ -30,6 +41,8 @@ export default async function HomePage() {
 
   return (
     <main>
+      <JsonLd data={organizationJsonLd()} />
+      <JsonLd data={websiteJsonLd()} />
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <h1 className={styles.headline}>

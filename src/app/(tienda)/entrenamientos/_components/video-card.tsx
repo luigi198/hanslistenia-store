@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { embedUrl, type TrainingVideo, watchUrl } from "../_content/training";
+import { youtubeEmbedUrl, youtubeWatchUrl } from "@/app/_lib/youtube";
+import type { TrainingVideo } from "../_content/training";
 import styles from "../training.module.css";
 
 /** Lets the visitor play the video full screen and picture-in-picture. */
@@ -13,7 +14,7 @@ export function VideoCard({ video }: { video: TrainingVideo }) {
   if (video.kind === "embed") {
     return (
       <iframe
-        src={embedUrl(video)}
+        src={youtubeEmbedUrl(video.id)}
         title={video.title}
         className={styles.video}
         loading="lazy"
@@ -26,7 +27,7 @@ export function VideoCard({ video }: { video: TrainingVideo }) {
 
   return (
     <a
-      href={watchUrl(video)}
+      href={youtubeWatchUrl(video.id)}
       target="_blank"
       rel="noopener noreferrer"
       className={styles.videoLink}

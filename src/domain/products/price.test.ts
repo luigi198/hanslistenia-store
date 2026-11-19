@@ -3,6 +3,7 @@ import {
   computeUnitPrice,
   InvalidSelectionError,
   isSelectionComplete,
+  maxUnitPrice,
   minUnitPrice,
 } from "./price";
 
@@ -90,5 +91,15 @@ describe("isSelectionComplete", () => {
     expect(() =>
       computeUnitPrice({ basePrice: 1, optionGroups: groups }, {}),
     ).toThrow(InvalidSelectionError);
+  });
+});
+
+describe("maxUnitPrice", () => {
+  it("is the base price plus the dearest value of every group", () => {
+    expect(maxUnitPrice(product)).toBe(15_500);
+  });
+
+  it("is the base price when there are no option groups", () => {
+    expect(maxUnitPrice({ basePrice: 9_000, optionGroups: [] })).toBe(9_000);
   });
 });

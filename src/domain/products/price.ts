@@ -66,3 +66,15 @@ export function minUnitPrice(product: {
     product.basePrice,
   );
 }
+
+/** Highest possible unit price: dearest value in every group. */
+export function maxUnitPrice(product: {
+  basePrice: number;
+  optionGroups: readonly OptionGroup[];
+}): number {
+  return product.optionGroups.reduce(
+    (total, group) =>
+      total + Math.max(...group.values.map((v) => v.priceDelta)),
+    product.basePrice,
+  );
+}

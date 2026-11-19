@@ -2,6 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { pageMetadata } from "@/app/_lib/seo";
+import {
+  breadcrumbJsonLd,
+  productJsonLd,
+  productPath,
+} from "@/app/_lib/structured-data";
+import { summarize } from "@/shared/text";
+import { JsonLd } from "../../_components/json-ld";
 import { PhotoPlaceholder } from "../../_components/photo-placeholder";
 import { getPublicProduct } from "../_lib/catalog";
 import styles from "../catalog.module.css";
@@ -10,6 +18,14 @@ import { PhotoCarousel } from "./photo-carousel";
 
 const DESCRIPTION_PREVIEW_LENGTH = 160;
 
+/** For a product whose description is empty or too thin to stand alone. */
+function fallbackDescription(name: string): string {
+  return `${name}: ropa de calistenia hecha a pedido en Costa Rica por Hanslistenia.`;
+}
+
+/** Below this, the description says too little for a search result. */
+const MIN_DESCRIPTION_LENGTH = 50;
+
 export async function generateMetadata({
   params,
 }: PageProps<"/productos/[slug]">): Promise<Metadata> {
@@ -17,10 +33,22 @@ export async function generateMetadata({
   // Metadata blocks the response for crawlers, so this gives them a real
   // 404 status; browsers get the streamed not-found page.
   if (!product) notFound();
-  return {
+  const summary = summarize(product.description, DESCRIPTION_PREVIEW_LENGTH);
+  return pageMetadata({
     title: product.name,
-    description: product.description.slice(0, DESCRIPTION_PREVIEW_LENGTH),
-  };
+    description:
+      summary.length >= MIN_DESCRIPTION_LENGTH
+        ? summary
+        : summarize(
+            fallbackDescription(product.name),
+            DESCRIPTION_PREVIEW_LENGTH,
+          ),
+    path: productPath(product.slug),
+    images: product.imageUrls.map((url, i) => ({
+      url,
+      alt: `${product.name}, foto ${i + 1}`,
+    })),
+  });
 }
 
 export default function ProductPage({
@@ -47,6 +75,14 @@ async function ProductDetails({
 
   return (
     <article className={styles.product}>
+      <JsonLd data={productJsonLd(product)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Inicio", path: "/" },
+          { name: "Productos", path: "/productos" },
+          { name: product.name, path: productPath(product.slug) },
+        ])}
+      />
       {product.imageUrls.length === 0 ? (
         <div className={styles.photo}>
           <PhotoPlaceholder />

@@ -167,7 +167,10 @@ Email failures must not fail the order operation; log and continue.
 ## SEO
 
 - Product and catalog pages statically generated, revalidated on admin edits.
-- `generateMetadata` per page, canonical URLs, Open Graph images.
+- `generateMetadata` per page, canonical URLs, Open Graph images. Every
+  public page builds its metadata with `pageMetadata()` (`app/_lib/seo.ts`):
+  Next merges metadata shallowly, so a page's own `openGraph` would drop the
+  layout's. New public pages also go in `app/sitemap.ts`.
 - JSON-LD: `Product` + `Offer` (`priceCurrency: "CRC"`), `Organization`.
 - `sitemap.ts` and `robots.ts`. Order and admin pages are `noindex`.
 - `next/image` for all images; `lang="es-CR"`.

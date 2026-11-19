@@ -74,9 +74,13 @@ when done. Design decisions live in `/CLAUDE.md`.
 
 ## Phase 6 — SEO & launch polish
 
-- [ ] Metadata, canonical URLs, OG images, JSON-LD (`Product`, `Offer`,
-      `Organization`).
-- [ ] `sitemap.ts`, `robots.ts`; Lighthouse pass (performance, a11y, SEO).
+- [x] Metadata, canonical URLs, OG images, JSON-LD (`Product`, `Offer`,
+      `Organization`, `WebSite`, `BreadcrumbList`, `ProfilePage`,
+      `VideoObject`). All public pages build theirs with `pageMetadata()`
+      (`src/app/_lib/seo.ts`); canonical origin is `https://hanslistenia.com`.
+- [x] `sitemap.ts`, `robots.ts`.
+- [ ] Lighthouse pass (performance, a11y, SEO) on the deployed site.
+- [ ] Vercel: redirect `www.hanslistenia.com` → `hanslistenia.com`.
 - [x] "Sobre el coach" page (`/sobre-el-coach`) with the coach's bio and
       photos.
 - [x] "Entrenamientos" page (`/entrenamientos`) with the coach's YouTube

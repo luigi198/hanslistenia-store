@@ -14,6 +14,8 @@ export interface CatalogItem {
   fromPrice: number;
   hasOptions: boolean;
   coverUrl: string | null;
+  /** ISO 8601; the sitemap's lastmod. */
+  updatedAt: string;
 }
 
 export interface PublicProduct {
@@ -39,6 +41,7 @@ export async function getCatalog(): Promise<CatalogItem[]> {
     fromPrice: minUnitPrice(p),
     hasOptions: p.optionGroups.length > 0,
     coverUrl: p.images[0] ? service.imageUrl(p.images[0].key) : null,
+    updatedAt: p.updatedAt.toISOString(),
   }));
 }
 

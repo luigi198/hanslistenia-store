@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { pageMetadata } from "@/app/_lib/seo";
+import { COACH_PATH, profilePageJsonLd } from "@/app/_lib/structured-data";
+import { JsonLd } from "../_components/json-ld";
 import {
   BIO_CLOSING,
   BIO_NAME,
@@ -10,12 +13,24 @@ import {
 import { CLOSING_PHOTO, PORTRAIT, SECTION_PHOTOS } from "./_content/photos";
 import styles from "./coach.module.css";
 
-export const metadata: Metadata = {
-  title: `Sobre el coach — ${BIO_NAME}`,
-  description:
-    "Hans Barrantes (Hanslistenia): atleta, entrenador de calistenia y fundador de CONATUS, Centro de Movimiento Integral, en Costa Rica.",
-  openGraph: { images: [{ url: PORTRAIT.src.src, alt: PORTRAIT.alt }] },
-};
+const DESCRIPTION =
+  "Hans Barrantes (Hanslistenia): promotor, atleta, instructor de calistenia y fundador de Conatus Centro de Movimiento Integral, en Costa Rica.";
+
+export const metadata: Metadata = pageMetadata({
+  title: `${BIO_NAME}, coach de calistenia`,
+  description: DESCRIPTION,
+  path: COACH_PATH,
+  type: "profile",
+  // A 1200×630 card: the portrait itself is too tall for link previews.
+  images: [
+    {
+      url: "/og/hans-barrantes.jpg",
+      alt: "Hans Barrantes, coach de calistenia en Costa Rica",
+      width: 1200,
+      height: 630,
+    },
+  ],
+});
 
 const ITALIC_MARK = /\*([^*]+)\*/g;
 
@@ -32,6 +47,13 @@ function withItalics(text: string): ReactNode[] {
 export default function CoachPage() {
   return (
     <main className={styles.page}>
+      <JsonLd
+        data={profilePageJsonLd({
+          name: BIO_NAME,
+          description: DESCRIPTION,
+          imagePath: PORTRAIT.src.src,
+        })}
+      />
       <header className={styles.intro}>
         <div className={styles.introText}>
           <h1 className={styles.name}>{BIO_NAME}</h1>

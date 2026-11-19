@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
         source: "/admin/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
+      {
+        // Order tracking pages hold a buyer's personal data.
+        source: "/pedido/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
     ];
   },
 };

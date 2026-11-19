@@ -23,12 +23,21 @@ type VideoBase = {
   title: string;
 };
 
+/** What Google needs to list an embedded video (VideoObject). */
+type EmbedDetails = {
+  description: string;
+  /** As published on YouTube (ISO 8601 with time zone). */
+  uploadDate: string;
+  /** ISO 8601 duration. */
+  duration: string;
+};
+
 /**
  * A video whose music's rights holder blocks playback outside YouTube is
  * shown as its thumbnail linking to YouTube instead of a broken player.
  */
 export type TrainingVideo =
-  | (VideoBase & { kind: "embed" })
+  | (VideoBase & EmbedDetails & { kind: "embed" })
   | (VideoBase & { kind: "link"; thumbnail: StaticImageData });
 
 /** Videos from the coach's channel (@hanslistenia), in page order. */
@@ -39,17 +48,13 @@ export const TRAINING_VIDEOS: TrainingVideo[] = [
     title: "Calistenia / Streetworkout Costa Rica",
     thumbnail: streetworkoutThumbnail,
   },
-  { kind: "embed", id: "qFckwZNa3m4", title: "Handstand Costa Rica" },
+  {
+    kind: "embed",
+    id: "qFckwZNa3m4",
+    title: "Handstand Costa Rica",
+    description:
+      "Parada de manos (handstand) con Hans Barrantes, Hanslistenia, en Costa Rica.",
+    uploadDate: "2026-05-26T14:50:53-07:00",
+    duration: "PT2M23S",
+  },
 ];
-
-/** youtube-nocookie: YouTube sets no tracking cookies until playback. */
-const EMBED_BASE = "https://www.youtube-nocookie.com/embed/";
-const WATCH_BASE = "https://www.youtube.com/watch?v=";
-
-export function embedUrl(video: VideoBase): string {
-  return `${EMBED_BASE}${video.id}`;
-}
-
-export function watchUrl(video: VideoBase): string {
-  return `${WATCH_BASE}${video.id}`;
-}
