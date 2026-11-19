@@ -12,7 +12,7 @@ export type BioSection = {
 export const BIO_NAME = "Hans Barrantes";
 
 export const BIO_TAGLINE =
-  "Hanslistenia | Atleta, entrenador y fundador de CONATUS";
+  "Hanslistenia | Promotor, atleta, instructor y fundador de Conatus Centro de Movimiento Integral";
 
 export const BIO_SECTIONS: BioSection[] = [
   {

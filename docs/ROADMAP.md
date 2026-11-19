@@ -79,6 +79,8 @@ when done. Design decisions live in `/CLAUDE.md`.
 - [ ] `sitemap.ts`, `robots.ts`; Lighthouse pass (performance, a11y, SEO).
 - [x] "Sobre el coach" page (`/sobre-el-coach`) with the coach's bio and
       photos.
+- [x] "Entrenamientos" page (`/entrenamientos`) with the coach's YouTube
+      videos (one is linked, not embedded: its music blocks embedding).
 - [ ] Home with final real content.
 - [ ] Custom domain, Google Search Console, Resend domain verification.
 - [ ] E2E happy path: browse → order → upload receipt → admin confirms →

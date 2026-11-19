@@ -43,9 +43,11 @@
   height: auto;
 }
 
+/* Four links don't fit one line on the narrowest phones: they wrap whole. */
 .nav {
   display: flex;
-  gap: clamp(1rem, 3vw, 1.75rem);
+  flex-wrap: wrap;
+  gap: 0.25rem clamp(1rem, 3vw, 1.75rem);
   font-size: 1rem;
   font-weight: 600;
 }

@@ -15,6 +15,11 @@ test("the coach's bio is reachable from the header", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Hans Barrantes",
   );
+  await expect(
+    page.getByText(
+      "Hanslistenia | Promotor, atleta, instructor y fundador de Conatus Centro de Movimiento Integral",
+    ),
+  ).toBeVisible();
   for (const section of [
     "Mi historia: encontrar un propósito en el movimiento",
     "Del aprendizaje personal a enseñar a otros",
